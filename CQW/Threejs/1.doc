@@ -1,0 +1,280 @@
+WebGL简介
+技术在进步，如果半年不学习新技术，那么我就落后了。本教程将带你进入一个全新的技术世界，它叫做WebGL。
+
+我非常激动，WebGL给了我很多灵感。让我去创造一个三维的世界，去创造一个神奇的网站或者游戏。最为神奇之处是它能够在浏览器上运行。
+
+随着数月的流逝，我们想一想90年代的浏览器，它只能显示简单的文字和图片；大约在2000左右，浏览器已经能够显示丰富的多媒体信息了；但是相对与传统的桌面程序来说，它还是有一些不足，例如，很难写出高质量的三维程序。
+
+但是现在，有了WebGL规范，一切都成为可能。越来越多的浏览器开始全方位的支持WebGL了。使用Chrome浏览器打开下面的例子看一看，你就会知道我要告诉你什么了。（http://aleksandarrodic.com/p/jellyfish/）
+
+　　此例子如此精彩，以至于我们深深的被其吸引。看了这个例子后，你也许急于想知道这个效果是怎么实现的，别急，在以后的课程中我们会这其原理进行剖析。
+　　最后，我们用自己的话总结一下，什么是WebGL。WebGL是在浏览器中实现三维效果的一套规范。
+　　使用WebGL原生的API来写3D程序是一件非常痛苦的事情，幸好，有很多同行花业余时间写了一些WebGL开源框架，其中three.js就是非常优秀的一个，它掩盖了很多麻烦的细节，那么，就让我们一起来看看，什么是three.js吧
+　　你可以从WebGL中文网的的网盘下载本教程的示例文件，地址是：http://yunpan.cn/cQ9sB6eUMPhfd 访问密码 b5cc
+　　在示例文件中，包含了本教程的所有示例代码和3D模型。在学习每一课之前，建议你运行一下那一课的代码。
+　　什么是threejs，很简单，你将它理解成three + js就可以了。three表示3D的意思，js表示javascript的意思。那么合起来，three.js就是使用javascript来写3D程序的意思。
+　　Javascript是运行在网页端的脚本语言，那么毫无疑问Three.js也是运行在浏览器上的。
+　　看到这里，也许你就开始有很多疑问了，那么让我来猜猜你的疑问吧。
+　　疑问
+1、javascript能写高效率的3D程序吗？
+　　能。技术在进步，几年前也许这是不行，写3D程序，最好是用c++，这样才能保证效率，但是现在，世界改变了。javascript的计算能力因为google的V8引擎得到了迅猛的增强，做3D程序，做服务器都没有问题。如果你对服务器感兴趣，你可以看看nodejs，当然，不是现在。现在，你最好保持热情，将Three.js学精深，在以后的工作学习中做出更大的成绩。
+2、javascript不是在浏览器上运行的吗，那怎么能写3D程序呢？
+　　是的，不错javascript是在浏览器里运行的，但是没有说3D程序就不能在浏览器上运行。
+　　浏览器对3D的支持，是一个激动人心的特性，现在，是的，就是现在，你可以写基于浏览器的3D应用了。
+　　提示： 好的3D应用，在腾讯开放平台上，会有一个不错的收入。腾讯开发平台是通过广告和访问量来收费的，你可以写一个好的3D应用，就能够挣一些钱了。
+　　它源自github的一个开源项目，发展相当迅速，现在已经发展到r73版了。(读者阅读时，可能更新)
+1、下载
+　　先去下载代码，它的地址是： https://github.com/mrdoob/three.js。 如图所示：
+　　如果你觉得慢，在我们菜单的视频教程的第一课中也有three.js的最新源码包
+6、剖析源目录结构
+　　要了解事物的真相，就要解析到它的深处去，我们来看看Three.js的源目录结果。用解压软件解开刚才的源码包，各个目录如下所示：
+　　
+　　Build目录：包含两个文件，three.js 和three.min.js 。这是three.js最终被引用的文件。一个已经压缩，一个没有压缩的js文件。
+　　Docs目录：这里是three.js的帮助文档，里面是各个函数的api，可惜并没有详细的解释。试图用这些文档来学会three.js是不可能的。
+　　Editor目录：一个类似3D-max的简单编辑程序，它能创建一些三维物体。
+　　Examples目录：一些很有趣的例子demo，可惜没有文档介绍。对图像学理解不深入的同学，学习成本非常高。
+　　Src目录：源代码目录，里面是所有源代码。
+　　Test目录：一些测试代码，基本没用。
+　　Utils目录：存放一些脚本，python文件的工具目录。例如将3D-Max格式的模型转换为three.js特有的json模型。
+　　.gitignore文件：git工具的过滤规则文件，没有用。
+　　CONTRIBUTING.md文件：一个怎么报bug，怎么获得帮助的说明文档。
+　　LICENSE文件：版权信息。
+　　README.md文件：介绍three.js的一个文件，里面还包含了各个版本的更新内容列表。
+7、配置你的开发环境
+　　在QQ群里，很多朋友经常问一些关于开发环境的问题，我们在这里回答一下：
+1、为什么我的浏览器不能运行Three.js？
+　　Three.js本质上是Webgl，如果你的浏览器不支持Webgl，那么肯定你就不能完整的运行Three.js。支持Webgl的浏览器很多，例如Chrome、FireFox、360安全浏览器6.0等，而IE浏览器对Webgl标准的支持就不太好。所以我们推荐使用Chrome浏览器，你可以在如下地址下载： https://www.google.com/intl/zh-CN/chrome/browser/
+2、javascript用什么工具开发比较好，可以有智能提示？
+　　老实说，并没有太好的javascript开发工具。我们曾经试过很多种javascript开发工具，例如Dreamweaver、Visual Studio、Zend Studio、Notepad++、Eclipse等。发现都不好用，没有太好的智能提示，使用起来特别麻烦。直到遇到了WebStorm，才心花怒放，一见钟情，从此开发javascript再也没有离开过WebStorm。 在工具的使用上，我走了很多弯路，浪费了很多眼球细胞，所以你就不要在这上面多费时间了，我估计能节约你5天的时间吧。 你可以到百度里去寻找WebStorm，然后下载它，为了给你节省时间，这里提供一个下载地址： http://www.ddxia.com/view/129861415446916.html 同时，你也可以在我们的网盘直接下载：http://pan.baidu.com/s/1o6JQX9S 和 http://pan.baidu.com/s/1tRb4a 下载
+3、各位大侠，Three.js怎么调试啊？
+　　这也是我遇到的一个问得最多的问题。按照一般的思路，在集成开发环境里面就能够运行调试，所以应该在WebStorm中就能够调试，但是这里我不推荐这样，因为配置起来比较麻烦，没有必要在这里浪费时间。 所以，我们使用Chrome浏览器自带的功能调试代码。 为了让我们的本节课的主线不太长，你可以点击下面的链接去学习如何调试代码？ 在chrome中调试javascript代码。 http://zhangyongbluesky.blog.163.com/blog/static/1831941620113155739840/
+8、第一个例子
+　　Three.js引擎怎么嵌入网页中，让它运行起来呢？很简单，只要html文件中引入three.js文件就可以了。代码可以在【初级教程\chapter1\1-1.html】中找到，如下：
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title></title> 
+<style>canvas { width: 100%; height: 100% }</style> 
+</head> 
+<body> 
+<script src="js/three.js"></script> 
+</body> 
+</html> 
+　　
+　　这里黑体部分表示引入了three.js文件，这个文件会自己初始化threejs的一些变量和环境。
+　　为了验证Threejs确实启动，我们用Chrome浏览器打开上面的那个网页，浏览器里面什么都没有，这时按F12键，打开调试窗口，并在Console下输入THREE.REVISION命令，得到73，这表示现在使用的three.js文件的版本是73。这个过程的主要截图如下所示：
+
+　　这样，就说明Three.js确实运行起来了。实践永远出真知，现在你就来试一试吧。
+　　题外话：THREE是一个three.js对象，可以狭隘的理解为three.js引擎的抽象。它代表着three.js引擎本身，其中包含引擎的很多常用属性和方法。例如THREE.REVISION就是代码引擎的版本。
+9、第一个框架
+　　为了方便实验，我们提供了2个简单的框架供你使用。你只要改变其中的一些代码或者参数，就能够得到实验的结果。第一个框架的效果是显示一个绿色的正方体，你可以在【初级教程\chapter1\1-2.html】中找到。
+<!DOCTYPE html> 
+<html> 
+<head> 
+<title></title> 
+<style>canvas { width: 100%; height: 100% }</style> 
+<script src="js/three.js"></script> 
+</head> 
+<body> 
+<script> 
+var scene = new THREE.Scene(); 
+
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); 
+
+var renderer = new THREE.WebGLRenderer(); 
+
+renderer.setSize(window.innerWidth, window.innerHeight); 
+
+document.body.appendChild(renderer.domElement); 
+var geometry = new THREE.CubeGeometry(1,1,1); 
+var material = new THREE.MeshBasicMaterial({color: 0x00ff00}); 
+var cube = new THREE.Mesh(geometry, material); scene.add(cube); 
+camera.position.z = 5; 
+function render() { 
+requestAnimationFrame(render); 
+cube.rotation.x += 0.1; 
+cube.rotation.y += 0.1; 
+renderer.render(scene, camera); 
+} 
+render(); 
+</script> 
+</body> 
+</html> 
+
+　　
+　　它的效果如下所示,注意不同版本的three.js，默认的背景色可能不一样，新版本的背景色可能是黑色：
+　　这个旋转的立方体算我们踏入WebGL这个神奇的世界的开始。借助于three.js，我们并没有写太多的代码就完成了这个示例。现在，我们来分析它。
+1、三大组建
+　　在Three.js中，要渲染物体到网页中，我们需要3个组建：场景（scene）、相机（camera）和渲染器（renderer）。有了这三样东西，才能将物体渲染到网页中去。
+　　记住关建语句：有了这三样东西，我们才能够使用相机将场景渲染到网页上去。
+　　创建这三要素的代码如下：
+var scene = new THREE.Scene(); // 场景 
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);// 透视相机 
+var renderer = new THREE.WebGLRenderer(); // 渲染器 
+renderer.setSize(window.innerWidth, window.innerHeight); // 设置渲染器的大小为窗口的内宽度，也就是内容区的宽度 
+document.body.appendChild(renderer.domElement); 
+　　
+　　在Threejs中场景就只有一种，用THREE.Scene来表示，要构件一个场景也很简单，只要new一个对象就可以了，代码如下：
+　　var scene = new THREE.Scene();
+　　场景是所有物体的容器，如果要显示一个苹果，就需要将苹果对象加入场景中。
+2、相机
+　　另一个组建是相机，相机决定了场景中那个角度的景色会显示出来。相机就像人的眼睛一样，人站在不同位置，抬头或者低头都能够看到不同的景色。
+　　场景只有一种，但是相机却又很多种。和现实中一样，不同的相机确定了呈相的各个方面。比如有的相机适合人像，有的相机适合风景，专业的摄影师根据实际用途不一样，选择不同的相机。对程序员来说，只要设置不同的相机参数，就能够让相机产生不一样的效果。
+　　在Threejs中有多种相机，这里介绍两种，它们是：
+　　透视相机（THREE.PerspectiveCamera）、这里我们使用一个透视相机，透视相机的参数很多，这里先不详细讲解。后面关于相机的那一章，我们会花大力气来讲。定义一个相机的代码如下所示：（已经迫不及待想看看相机的参数了，点这里）
+View Raw Code?
+1
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+　　
+3、渲染器
+　　最后一步就是设置渲染器，渲染器决定了渲染的结果应该画在页面的什么元素上面，并且以怎样的方式来绘制。这里我们定义了一个WebRenderer渲染器，代码如下所示：
+var renderer = new THREE.WebGLRenderer(); 
+renderer.setSize(window.innerWidth, window.innerHeight); 
+document.body.appendChild(renderer.domElement); 
+　　
+　　注意，渲染器renderer的domElement元素，表示渲染器中的画布，所有的渲染都是画在domElement上的，所以这里的appendChild表示将这个domElement挂接在body下面，这样渲染的结果就能够在页面中显示了。
+4、添加物体到场景中
+　　那现在，我们将一个物体添加到场景中：
+var geometry = new THREE.CubeGeometry(1,1,1); 
+var material = new THREE.MeshBasicMaterial({color: 0x00ff00}); 
+var cube = new THREE.Mesh(geometry, material); 
+scene.add(cube); 
+　　
+　　代码中出现了THREE.CubeGeometry，THREE.CubeGeometry是什么东东，他是一个几何体，几何体由什么组成，已经不是本课的主要内容了，后面的课程我们会详细的学到。不过这里你只需要知道CubeGeometry是一个正方体或者长方体，究竟是什么，由它的3个参数所决定，cubeGeometry的原型如下代码所示：
+View Raw Code?
+1
+CubeGeometry(width, height, depth, segmentsWidth, segmentsHeight, segmentsDepth, materials, sides) 
+　　width：立方体x轴的长度
+　　height：立方体y轴的长度
+　　depth：立方体z轴的深度，也就是长度
+　　想一想大家就明白，以上3个参数就能够确定一个立方体。
+　　剩下的几个参数就要费解和复杂一些了，不过后面我们会自己来写一个立方体，到时候，你会更明白这些参数的意义，这里你可以将这些参数省略。
+5、渲染
+　　终于到了最后一步，这一步做完后，就可以该干嘛干嘛去了。
+　　渲染应该使用渲染器，结合相机和场景来得到结果画面。实现这个功能的函数是
+　　renderer.render(scene, camera);
+　　渲染函数的原型如下：
+　　render( scene, camera, renderTarget, forceClear )
+　　各个参数的意义是：
+　　scene：前面定义的场景
+　　camera：前面定义的相机
+　　renderTarget：渲染的目标，默认是渲染到前面定义的render变量中
+　　forceClear：每次绘制之前都将画布的内容给清除，即使自动清除标志autoClear为false，也会清除。
+6、渲染循环
+　　渲染有两种方式：实时渲染和离线渲染 。
+　　先看看离线渲染，想想《西游降魔篇》中最后的佛主，他肯定不是真的，是电脑渲染出来的，其画面质量是很高的，它是事先渲染好一帧一帧的图片，然后再把图片拼接成电影的。这就是离线渲染。如果不事先处理好一帧一帧的图片，那么电影播放得会很卡。CPU和GPU根本没有能力在播放的时候渲染出这种高质量的图片。
+　　实时渲染：就是需要不停的对画面进行渲染，即使画面中什么也没有改变，也需要重新渲染。下面就是一个渲染循环：
+function render() { 
+cube.rotation.x += 0.1; 
+cube.rotation.y += 0.1; 
+renderer.render(scene, camera); 
+requestAnimationFrame(render); 
+} 
+　　其中一个重要的函数是requestAnimationFrame，这个函数就是让浏览器去执行一次参数中的函数，这样通过上面render中调用requestAnimationFrame()函数，requestAnimationFrame()函数又让rander()再执行一次，就形成了我们通常所说的游戏循环了。
+　　如不能理解游戏循环，请在这里提问。
+10、场景，相机，渲染器之间的关系
+　　Three.js中的场景是一个物体的容器，开发者可以将需要的角色放入场景中，例如苹果，葡萄。同时，角色自身也管理着其在场景中的位置。
+　　相机的作用就是面对场景，在场景中取一个合适的景，把它拍下来。
+　　渲染器的作用就是将相机拍摄下来的图片，放到浏览器中去显示。他们三者的关系如下图所示：
+11、第二个框架（重构）
+　　第一个框架是将所有代码在一段脚本中完成，当逻辑复杂一点后，就比较难读懂。所以，我们将其按照功能分解成函数，代码如下：
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="UTF-8"> 
+<title>Three框架</title> 
+<script src="js/Three.js" data-ke-src="js/Three.js"></script> 
+<style type="text/css"> 
+div#canvas-frame { 
+border: none; 
+cursor: pointer; 
+width: 100%; 
+height: 600px; 
+background-color: #EEEEEE; 
+} 
+
+</style> 
+<script> 
+var renderer; 
+function initThree() { 
+width = document.getElementById('canvas-frame').clientWidth; 
+height = document.getElementById('canvas-frame').clientHeight; 
+renderer = new THREE.WebGLRenderer({ 
+antialias : true 
+}); 
+renderer.setSize(width, height); 
+document.getElementById('canvas-frame').appendChild(renderer.domElement); 
+renderer.setClearColor(0xFFFFFF, 1.0); 
+} 
+
+var camera; 
+function initCamera() { 
+camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000); 
+camera.position.x = 0; 
+camera.position.y = 1000; 
+camera.position.z = 0; 
+camera.up.x = 0; 
+camera.up.y = 0; 
+camera.up.z = 1; 
+camera.lookAt({ 
+x : 0, 
+y : 0, 
+z : 0 
+}); 
+} 
+
+var scene; 
+function initScene() { 
+scene = new THREE.Scene(); 
+} 
+
+var light; 
+function initLight() { 
+light = new THREE.DirectionalLight(0xFF0000, 1.0, 0); 
+light.position.set(100, 100, 200); 
+scene.add(light); 
+} 
+
+var cube; 
+function initObject() { 
+
+var geometry = new THREE.Geometry(); 
+var material = new THREE.LineBasicMaterial( { vertexColors: THREE.VertexColors} ); 
+var color1 = new THREE.Color( 0x444444 ), color2 = new THREE.Color( 0xFF0000 ); 
+
+// 线的材质可以由2点的颜色决定 
+var p1 = new THREE.Vector3( -100, 0, 100 ); 
+var p2 = new THREE.Vector3( 100, 0, -100 ); 
+geometry.vertices.push(p1); 
+geometry.vertices.push(p2); 
+geometry.colors.push( color1, color2 ); 
+
+var line = new THREE.Line( geometry, material, THREE.LinePieces ); 
+scene.add(line); 
+} 
+function render() 
+{ 
+renderer.clear(); 
+renderer.render(scene, camera); 
+requestAnimationFrame(render); 
+} 
+function threeStart() { 
+initThree(); 
+initCamera(); 
+initScene(); 
+initLight(); 
+initObject(); 
+render(); 
+} 
+
+</script> 
+</head> 
+
+<body onload="threeStart();"> 
+<div id="canvas-frame"></div> 
+</body> 
+</html> 
+　　
+　　大概了解一下就可以了，它只是将框架一的代码，放到了不同的函数中，最终通过threeStart()函数调用而已。这段比较规范的代码在以后的例子中可能会用到。
+12、结尾
+　　本章即将结束，我相信，你应该学到了一些东西，至少你能写一个html，并且加上three.js，让它运行起来。非常高兴为你献上了本节的内容。 快点收藏本网站吧，因为“再过五十年我就是古董了，所以你趁现在赶紧好好收藏我吧”。
